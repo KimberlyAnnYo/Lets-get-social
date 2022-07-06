@@ -13,7 +13,7 @@ const thoughtController = {
     }
 }
 
-getThoughtsById({params}, res) {
+getThoughtsById({params}, res); {
     Thought.findOne({_id: params.id})
     .populate({path: 'reactions', select: '__V'})
     .select('-__v')
@@ -28,11 +28,11 @@ getThoughtsById({params}, res) {
         console.log(err);
         res.status(400).json(err)
     })
-},
+}
 
-createThought({body}, res) {
+createThought({body}, res); {
     Thought.create(body)
-    .then(dbThoughtData = > {
+    .then(dbThoughtData => {
         User.findOneAndUpdate(
             {_id: body.userId},
             { $push: { thoughts: dbThoughtData._id} },
@@ -48,9 +48,9 @@ createThought({body}, res) {
         .catch(err => res.json(err));
     })
     .catch(err => res.status(400).json(err));
-},
+}
 
-updateThought({ params, body}, res) {
+updateThought({ params, body}, res); {
     Thought.findOneAndUpdate (
         {_id:params.id },
         body,
@@ -64,9 +64,9 @@ updateThought({ params, body}, res) {
         res.json(dbThoughtData);
     })
     .catch(err => res.status(400).json(err));
-},
+}
 
-deleteThought({ params }, res) {
+deleteThought({ params }, res); {
     
     Thought.findOneAndDelete({ _id: params.id })
     .then(dbThoughtData => {
@@ -85,9 +85,9 @@ deleteThought({ params }, res) {
         .catch(err => res.status(500).json(err));
     })
     .catch(err => res.status(500).json(err));
-},
+}
 
-addReaction({ params, body}, res) {
+addReaction({ params, body}, res); {
     Thought.findOneAndUpdate (
         {_id: params.thoughtId}, 
         {$addToSet: {reactions:body}},
@@ -109,7 +109,7 @@ deleteReaction({params, body}, res); {
         {$pull: {reactions:{ reactionId: body.reactionId}}},
         {new: true, runValidators: true}
     )
-    .then(dbThoughtData = > {
+    .then(dbThoughtData => {
         if (!dbThoughtData) {
             res.status(404).json({message: "No Thought associated with this id!"})
             return;
